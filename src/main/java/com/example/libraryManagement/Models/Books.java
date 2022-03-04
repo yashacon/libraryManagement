@@ -4,10 +4,11 @@ package com.example.libraryManagement.Models;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
-import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.elasticsearch.annotations.Document;
 
 
-@Document
+@Document(indexName = "books")
+@org.springframework.data.mongodb.core.mapping.Document
 public class Books {
     @Id
     @Field(type= FieldType.Keyword)

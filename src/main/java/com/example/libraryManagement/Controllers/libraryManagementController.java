@@ -38,7 +38,8 @@ public class libraryManagementController {
 
     @Autowired
     private JwtUtil jwtUtil;
-//
+
+    /*-----------------JWT API---------------*/
     @PostMapping("authenticate")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception{
         try {
@@ -53,13 +54,15 @@ public class libraryManagementController {
         final String jwt=jwtUtil.generateToken(userDetails);
         return ResponseEntity.ok(new AuthenticationResponse(jwt));
     }
+    /*-*********************************-*/
 
+    /*----------------Book APIs----------------*/
     @GetMapping("getAll")
     public List<Books> fun(){
         return bookService.getBooks();
     }
-    @GetMapping("getfast/")
-    public List<ElasticBooks> Fastfun(){
+    @GetMapping("getfast")
+    public List<Books> Fastfun(){
         return bookService.getElasticBooks();
     }
 
@@ -68,18 +71,13 @@ public class libraryManagementController {
         return bookService.getBookById(id);
     }
     @GetMapping("fast/{id}")
-    public ElasticBooks getFastBookID(@PathVariable String id){
+    public Books getFastBookID(@PathVariable String id){
         return bookService.getElasticBookById(id);
     }
 
     @PostMapping("add")
     public String addBook(@RequestBody Books book){
         bookService.addBook(book);
-        return book.toString();
-    }
-    @PostMapping("addFast")
-    public String addBookFast(@RequestBody ElasticBooks book){
-        bookService.addBookFast(book);
         return book.toString();
     }
     @PutMapping("update")
@@ -98,29 +96,18 @@ public class libraryManagementController {
         bookService.deleteById(id);
         return "Deleted " +id+" Successfully";
     }
-    @PutMapping("updateFast")
-    public String updateBookIndex(@RequestBody ElasticBooks book){
-        bookService.updateBookIndex(book);
-        return book.toString();
-    }
+    /*-*********************************-*/
 
-    @DeleteMapping("fastDelete")
-    public String deleteAllBooksIndex(){
-        bookService.deleteAllIndex();
-        return "Deleted Successfully";
-    }
-    @DeleteMapping("fastDeleteBook/{id}")
-    public String deleteIndexBookID(@PathVariable String id){
-        bookService.deleteIndexById(id);
-        return "Deleted " +id+" Successfully";
-    }
-
+    /*---------User APIs---------------*/
     @PostMapping("createUser")
     public String createUser(@RequestBody User user){
         usersservice.addUser(user);
         return "Registered Successfully!";
     }
+    /*-*********************************-*/
 
+
+    /*----------Author APIs-------------*/
     @PostMapping("addAuthor")
     public Author addAuthor(@RequestBody Author author){
         authorService.addAuthor(author);
@@ -135,4 +122,16 @@ public class libraryManagementController {
     public List<Author> getAuthorByBook(@PathVariable String id){
         return authorService.getAuthorByBook(id);
     }
+
+    @GetMapping("getBooksByAuthor/{id}")
+    public List<Books> getBooksByAuthor(@PathVariable int id){
+        return authorService.getBooksByAuthor(id);
+    }
+
+    @GetMapping("getAuthorByBookName/{name}")
+    public List<Author> getAuthorByBookName(@PathVariable String name){
+        return authorService.getAuthorByBookName(name);
+    }
+
+    /*-*********************************-*/
 }

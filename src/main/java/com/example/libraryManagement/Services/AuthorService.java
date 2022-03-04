@@ -30,4 +30,12 @@ public class AuthorService {
     public List<Author> getAuthorByBook(String id) {
         return authorRepository.findByBooksId(id);
     }
+    public List<Author> getAuthorByBookName(String name) {
+        return authorRepository.findByBooksName(name);
+    }
+
+    public List<Books> getBooksByAuthor(int id) {
+        Author temp=authorRepository.findById(id);
+        return temp.getBooks();
+    }
 }
