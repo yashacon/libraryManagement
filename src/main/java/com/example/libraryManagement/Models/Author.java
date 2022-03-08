@@ -1,19 +1,23 @@
 package com.example.libraryManagement.Models;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.List;
 
 @Document
 public class Author {
-    public int getId() {
-        return id;
+
+
+    @Transient
+    public static final String SEQUENCE_NAME = "authors_sequence";
+
+    public long getAuthorId() {
+        return authorId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setAuthorId(long authorId) {
+        this.authorId = authorId;
     }
 
     public String getFirstName() {
@@ -32,21 +36,27 @@ public class Author {
         this.lastName = lastName;
     }
 
-    public List<Books> getBooks() {
-        return books;
-    }
-
-    public void setBooks(List<Books> books) {
-        this.books = books;
-    }
-
     @Id
-    private int id;
+    private long authorId;
     private String firstName;
+
+    @Override
+    public String toString() {
+        return "Author{" +
+                "authorId=" + authorId +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                '}';
+    }
+
+    public Author(long authorId, String firstName, String lastName) {
+        this.firstName = firstName;
+        this.authorId=authorId;
+        this.lastName = lastName;
+    }
+
     private String lastName;
 
-    @DBRef
-    private List<Books> books;
 
 
 }

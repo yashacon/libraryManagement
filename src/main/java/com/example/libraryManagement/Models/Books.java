@@ -2,6 +2,7 @@ package com.example.libraryManagement.Models;
 
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -10,34 +11,37 @@ import org.springframework.data.elasticsearch.annotations.Document;
 @Document(indexName = "books")
 @org.springframework.data.mongodb.core.mapping.Document
 public class Books {
+
+    @Transient
+    public static final String SEQUENCE_NAME = "books_sequence";
+
     @Id
     @Field(type= FieldType.Keyword)
-    private String id;
-
+    private long bookId;
     @Field(type= FieldType.Text)
     private String name;
     @Field(type= FieldType.Text)
-    private String author;
+    private long authorId;
     @Field(type= FieldType.Text)
     private String description;
 
 
-    public Books(String id, String name, String author, String description) {
-        this.id = id;
+    public Books(long bookId,long authorId, String name, String description) {
+        this.bookId=bookId;
+        this.authorId=authorId;
         this.name = name;
-        this.author = author;
         this.description = description;
     }
 
     public Books() {
     }
 
-    public String getId() {
-        return id;
+    public long getBookId() {
+        return bookId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setBookId(String id) {
+        this.bookId = bookId;
     }
 
     public String getName() {
@@ -48,12 +52,12 @@ public class Books {
         this.name = name;
     }
 
-    public String getAuthor() {
-        return author;
+    public long getAuthor() {
+        return authorId;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
+    public void setAuthor(long authorId) {
+        this.authorId = authorId;
     }
 
     public String getDescription() {
@@ -67,9 +71,9 @@ public class Books {
     @Override
     public String toString() {
         return "Books{" +
-                "id=" + id +
+                "id=" + bookId +
                 ", name='" + name + '\'' +
-                ", author='" + author + '\'' +
+                ", author='" + authorId + '\'' +
                 ", description='" + description + '\'' +
                 '}';
     }

@@ -1,10 +1,11 @@
 package com.example.libraryManagement.Controllers;
 
 import com.example.libraryManagement.Models.*;
-import com.example.libraryManagement.Repositories.UserRepository;
 import com.example.libraryManagement.Services.AuthorService;
 import com.example.libraryManagement.Services.BookService;
 import com.example.libraryManagement.Services.UserService;
+import com.example.libraryManagement.dto.AddAuthorRequestDTO;
+import com.example.libraryManagement.dto.AddBookRequestDTO;
 import com.example.libraryManagement.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -67,23 +68,21 @@ public class libraryManagementController {
     }
 
     @GetMapping("book/{id}")
-    public Books getBookID(@PathVariable String id){
+    public Books getBookID(@PathVariable long id){
         return bookService.getBookById(id);
     }
     @GetMapping("fast/{id}")
-    public Books getFastBookID(@PathVariable String id){
+    public Books getFastBookID(@PathVariable long id){
         return bookService.getElasticBookById(id);
     }
 
     @PostMapping("add")
-    public String addBook(@RequestBody Books book){
-        bookService.addBook(book);
-        return book.toString();
+    public Books addBook(@RequestBody AddBookRequestDTO addBookRequestDTO){
+        return bookService.addBook(addBookRequestDTO);
     }
-    @PutMapping("update")
-    public String updateBook(@RequestBody Books book){
-        bookService.updateBook(book);
-        return book.toString();
+    @PutMapping("update/{id}")
+    public Books updateBook(@RequestBody AddBookRequestDTO addBookRequestDTO,@PathVariable long id){
+        return bookService.updateBook(addBookRequestDTO,id);
     }
 
     @DeleteMapping("delete")
@@ -92,7 +91,7 @@ public class libraryManagementController {
         return "Deleted Successfully";
     }
     @DeleteMapping("deleteBook/{id}")
-    public String deleteBookID(@PathVariable String id){
+    public String deleteBookID(@PathVariable long id){
         bookService.deleteById(id);
         return "Deleted " +id+" Successfully";
     }
@@ -109,28 +108,39 @@ public class libraryManagementController {
 
     /*----------Author APIs-------------*/
     @PostMapping("addAuthor")
-    public Author addAuthor(@RequestBody Author author){
-        authorService.addAuthor(author);
-        return author;
+    public Author addAuthor(@RequestBody AddAuthorRequestDTO addAuthorRequestDTO){
+        return authorService.addAuthor(addAuthorRequestDTO);
     }
     @GetMapping("getAllAuthor")
     public List<Author> getAllAuthor(){
         return authorService.getAllAuthor();
     }
 
-    @GetMapping("getAuthorByBook/{id}")
-    public List<Author> getAuthorByBook(@PathVariable String id){
-        return authorService.getAuthorByBook(id);
+    @GetMapping("getAuthor/{id}")
+    public Author getAuthorById(@PathVariable long id){
+        return authorService.getAuthorById(id);
     }
+
+    @DeleteMapping("deleteAuthors")
+    public String deleteAllAuthors(){
+        authorService.deleteAll();
+        return "Deleted Successfully";
+    }
+    @DeleteMapping("deleteAuthor/{id}")
+    public String deleteAuthorID(@PathVariable long id){
+        authorService.deleteByAuthorId(id);
+        return "Deleted " +id+" Successfully";
+    }
+    @PutMapping("updateAuthor/{id}")
+    public Author updateAuthor(@RequestBody AddAuthorRequestDTO addAuthorRequestDTO,@PathVariable long id){
+        return authorService.updateById(addAuthorRequestDTO,id);
+    }
+
+
 
     @GetMapping("getBooksByAuthor/{id}")
-    public List<Books> getBooksByAuthor(@PathVariable int id){
-        return authorService.getBooksByAuthor(id);
-    }
-
-    @GetMapping("getAuthorByBookName/{name}")
-    public List<Author> getAuthorByBookName(@PathVariable String name){
-        return authorService.getAuthorByBookName(name);
+    public List<Books> getBooksByAuthor(@PathVariable long id){
+        return bookService.getBooksByAuthor(id);
     }
 
     /*-*********************************-*/
